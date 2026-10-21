@@ -174,28 +174,56 @@ function barWidth(count) {
 .card-header.back { padding-top: 20px; }
 
 .holo {
+  position: relative;
   margin-left: auto;
-  width: 52px;
-  height: 34px;
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  background: conic-gradient(
-    from 210deg,
-    #ff7d7d, #ffce61, #7dff8a, #61d4ff, #b061ff, #ff7d7d
+  width: 66px;
+  height: 38px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: repeating-linear-gradient(
+    -38deg,
+    #ff8a8a 0 3px,
+    #ffd28a 3px 6px,
+    #9dffa8 6px 9px,
+    #8ad9ff 9px 12px,
+    #c39dff 12px 15px
   );
-  animation: holoSpin 6s linear infinite;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.38),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.holo::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 62%
+  );
+  transform: translateX(-90%);
+  animation: sheen 4.2s ease-in-out infinite;
+}
+@keyframes sheen {
+  0%, 55% { transform: translateX(-90%); }
+  85%, 100% { transform: translateX(90%); }
 }
 .holo span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
   font-family: var(--mono);
   font-weight: 900;
-  font-size: 13px;
-  color: #10131a;
+  font-size: 12px;
+  color: #0a0d13;
   letter-spacing: 1px;
-}
-@keyframes holoSpin {
-  to { filter: hue-rotate(360deg); }
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
 }
 
 .card-body {

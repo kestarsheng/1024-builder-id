@@ -61,17 +61,38 @@ function drawBarcode(ctx, x, y, w, h, seed) {
 }
 
 function drawHolo(ctx, x, y, w, h) {
-  const g = ctx.createLinearGradient(x, y, x + w, y + h)
-  g.addColorStop(0, '#ff7d7d')
-  g.addColorStop(0.25, '#ffce61')
-  g.addColorStop(0.5, '#7dff8a')
-  g.addColorStop(0.75, '#61d4ff')
-  g.addColorStop(1, '#b061ff')
-  ctx.fillStyle = g
+  const colors = ['#ff8a8a', '#ffd28a', '#9dffa8', '#8ad9ff', '#c39dff']
+  ctx.save()
   roundRect(ctx, x, y, w, h, 8)
-  ctx.fill()
-  ctx.fillStyle = '#10131a'
-  ctx.font = '900 24px "Arial", sans-serif'
+  ctx.clip()
+  const step = 5
+  let cx = x - h
+  let ci = 0
+  while (cx < x + w + h) {
+    ctx.fillStyle = colors[ci % colors.length]
+    ctx.beginPath()
+    ctx.moveTo(cx, y + h)
+    ctx.lineTo(cx + step, y + h)
+    ctx.lineTo(cx + step + h, y)
+    ctx.lineTo(cx + h, y)
+    ctx.closePath()
+    ctx.fill()
+    cx += step
+    ci++
+  }
+  const sheen = ctx.createLinearGradient(x, y + h, x + w, y)
+  sheen.addColorStop(0.35, 'rgba(255,255,255,0)')
+  sheen.addColorStop(0.5, 'rgba(255,255,255,0.5)')
+  sheen.addColorStop(0.65, 'rgba(255,255,255,0)')
+  ctx.fillStyle = sheen
+  ctx.fillRect(x, y, w, h)
+  ctx.restore()
+  ctx.strokeStyle = 'rgba(255,255,255,0.38)'
+  ctx.lineWidth = 1
+  roundRect(ctx, x, y, w, h, 8)
+  ctx.stroke()
+  ctx.fillStyle = '#0a0d13'
+  ctx.font = '900 12px "Courier New", monospace'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillText('1024', x + w / 2, y + h / 2 + 1)
@@ -115,7 +136,7 @@ export function exportCardPng(stats) {
   ctx.fillStyle = '#5c6878'
   ctx.fillText('B U I L D E R   I D E N T I T Y   C A R D', 22, 52)
 
-  drawHolo(ctx, 782, 20, 52, 34)
+  drawHolo(ctx, 768, 18, 66, 38)
 
   const px = 22
   const py = 70

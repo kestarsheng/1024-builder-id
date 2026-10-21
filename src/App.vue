@@ -1,11 +1,14 @@
 <template>
   <div class="stage">
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="grid-floor" aria-hidden="true"></div>
+    <div class="horizon" aria-hidden="true"></div>
     <div class="noise" aria-hidden="true"></div>
 
     <header class="topbar">
       <span class="prompt">~/$</span>
-      <span class="cmd">whoami --builder</span>
-      <span class="caret-blink">▋</span>
+      <span class="cmd" :class="{ ok: !!stats, err: !!error }">{{ terminalLine }}</span>
+      <span v-if="!stats && !error" class="caret-blink">▋</span>
       <span class="topbar-right mono">TRAE 1024 狂欢周</span>
     </header>
 
@@ -73,7 +76,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BuilderIdCard from './components/BuilderIdCard.vue'
 import { fetchBuilderProfile } from './api/github.js'
 import { exportCardPng } from './utils/exportCard.js'
@@ -87,6 +90,14 @@ const cardKey = ref(0)
 const scanLine = ref('[□□□□□□□□□□] 0%')
 
 let scanTimer = null
+
+const terminalLine = computed(() => {
+  if (loading.value) return `whoami --builder ${username.value || '...'} --verify`
+  if (stats.value) return `✓ identity issued: @${stats.value.login} · ${stats.value.title}`
+  if (error.value) return `✗ ${error.value.slice(0, 60)}`
+  const name = username.value.trim().replace(/^@/, '')
+  return name ? `whoami --builder ${name}` : 'whoami --builder'
+})
 
 function runScanAnimation() {
   const frames = ['-', '\\', '|', '/']
@@ -141,6 +152,60 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow-x: hidden;
+}
+
+.aurora {
+  position: fixed;
+  inset: -25%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(620px 320px at 18% 22%, rgba(61, 255, 160, 0.10), transparent 62%),
+    radial-gradient(560px 300px at 78% 28%, rgba(97, 180, 255, 0.10), transparent 62%),
+    radial-gradient(480px 280px at 52% 78%, rgba(176, 97, 255, 0.09), transparent 62%),
+    radial-gradient(400px 240px at 88% 72%, rgba(255, 182, 72, 0.05), transparent 60%);
+  animation: auroraDrift 26s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+  50% { transform: translate3d(2%, 2%, 0) scale(1.05); }
+  100% { transform: translate3d(-1%, 1.5%, 0) scale(1.02); }
+}
+
+.grid-floor {
+  position: fixed;
+  left: -45%;
+  right: -45%;
+  bottom: -6%;
+  height: 52%;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(61, 255, 160, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 255, 160, 0.10) 1px, transparent 1px);
+  background-size: 46px 46px;
+  transform: perspective(620px) rotateX(61deg);
+  transform-origin: top center;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%, transparent 96%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 26%, transparent 96%);
+  animation: gridFlow 3.2s linear infinite;
+}
+@keyframes gridFlow {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 46px, 0 46px; }
+}
+
+.horizon {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 46%;
+  height: 1px;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent, rgba(61, 255, 160, 0.35) 30%, rgba(97, 180, 255, 0.35) 70%, transparent);
+  filter: blur(0.5px);
 }
 
 .noise {
@@ -154,7 +219,7 @@ onMounted(() => {
 
 .topbar {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -163,16 +228,20 @@ onMounted(() => {
   font-size: 13px;
   border-bottom: 1px solid #1a2030;
   background: rgba(13, 17, 23, 0.6);
+  backdrop-filter: blur(6px);
+  min-height: 46px;
 }
 .prompt { color: #3dffa0; }
-.cmd { color: #a8b3c5; }
-.caret-blink { color: #3dffa0; animation: blink 1s steps(2) infinite; }
+.cmd { color: #a8b3c5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmd.ok { color: #3dffa0; }
+.cmd.err { color: #ff6b6b; }
+.caret-blink { color: #3dffa0; animation: blink 1s steps(2) infinite; flex-shrink: 0; }
 @keyframes blink { 50% { opacity: 0; } }
-.topbar-right { margin-left: auto; color: #5c6878; font-size: 11px; }
+.topbar-right { margin-left: auto; color: #5c6878; font-size: 11px; flex-shrink: 0; }
 
 .content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   flex: 1;
   width: min(1120px, 94vw);
   margin: 0 auto;
@@ -312,7 +381,7 @@ onMounted(() => {
 
 .footer {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   padding: 18px;
   color: #425062;
