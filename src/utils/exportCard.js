@@ -61,7 +61,7 @@ function drawBarcode(ctx, x, y, w, h, seed) {
 }
 
 function drawHolo(ctx, x, y, w, h) {
-  const colors = ['#ff8a8a', '#ffd28a', '#9dffa8', '#8ad9ff', '#c39dff']
+  const colors = ['#c9d3e0', '#97a6ba', '#6d7d94', '#aebccd', '#8494ab']
   ctx.save()
   roundRect(ctx, x, y, w, h, 8)
   ctx.clip()
@@ -81,13 +81,15 @@ function drawHolo(ctx, x, y, w, h) {
     ci++
   }
   const sheen = ctx.createLinearGradient(x, y + h, x + w, y)
-  sheen.addColorStop(0.35, 'rgba(255,255,255,0)')
-  sheen.addColorStop(0.5, 'rgba(255,255,255,0.5)')
-  sheen.addColorStop(0.65, 'rgba(255,255,255,0)')
+  sheen.addColorStop(0.4, 'rgba(120,255,200,0)')
+  sheen.addColorStop(0.48, 'rgba(120,255,200,0.35)')
+  sheen.addColorStop(0.5, 'rgba(255,255,255,0.55)')
+  sheen.addColorStop(0.52, 'rgba(120,255,200,0.35)')
+  sheen.addColorStop(0.6, 'rgba(120,255,200,0)')
   ctx.fillStyle = sheen
   ctx.fillRect(x, y, w, h)
   ctx.restore()
-  ctx.strokeStyle = 'rgba(255,255,255,0.38)'
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'
   ctx.lineWidth = 1
   roundRect(ctx, x, y, w, h, 8)
   ctx.stroke()

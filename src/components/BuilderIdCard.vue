@@ -183,15 +183,15 @@ function barWidth(count) {
   flex-shrink: 0;
   background: repeating-linear-gradient(
     -38deg,
-    #ff8a8a 0 3px,
-    #ffd28a 3px 6px,
-    #9dffa8 6px 9px,
-    #8ad9ff 9px 12px,
-    #c39dff 12px 15px
+    #c9d3e0 0 2px,
+    #97a6ba 2px 4px,
+    #6d7d94 4px 6px,
+    #aebccd 6px 8px,
+    #8494ab 8px 10px
   );
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.38),
-    inset 0 -6px 10px rgba(0, 0, 0, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.22),
     0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .holo::after {
@@ -200,9 +200,11 @@ function barWidth(count) {
   inset: -20%;
   background: linear-gradient(
     105deg,
-    transparent 38%,
+    transparent 40%,
+    rgba(120, 255, 200, 0.35) 48%,
     rgba(255, 255, 255, 0.55) 50%,
-    transparent 62%
+    rgba(120, 255, 200, 0.35) 52%,
+    transparent 60%
   );
   transform: translateX(-90%);
   animation: sheen 4.2s ease-in-out infinite;
@@ -223,7 +225,7 @@ function barWidth(count) {
   font-size: 12px;
   color: #0a0d13;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .card-body {

@@ -1,7 +1,9 @@
 <template>
   <div class="stage">
     <div class="aurora" aria-hidden="true"></div>
+    <div class="starfield" aria-hidden="true"></div>
     <div class="grid-floor" aria-hidden="true"></div>
+    <div class="grid-fog" aria-hidden="true"></div>
     <div class="horizon" aria-hidden="true"></div>
     <div class="noise" aria-hidden="true"></div>
 
@@ -161,16 +163,41 @@ onMounted(() => {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(620px 320px at 18% 22%, rgba(61, 255, 160, 0.10), transparent 62%),
-    radial-gradient(560px 300px at 78% 28%, rgba(97, 180, 255, 0.10), transparent 62%),
-    radial-gradient(480px 280px at 52% 78%, rgba(176, 97, 255, 0.09), transparent 62%),
-    radial-gradient(400px 240px at 88% 72%, rgba(255, 182, 72, 0.05), transparent 60%);
-  animation: auroraDrift 26s ease-in-out infinite alternate;
+    radial-gradient(620px 340px at 16% 20%, rgba(61, 255, 160, 0.16), transparent 62%),
+    radial-gradient(560px 320px at 80% 24%, rgba(97, 180, 255, 0.16), transparent 62%),
+    radial-gradient(500px 300px at 50% 80%, rgba(61, 255, 160, 0.10), transparent 62%),
+    radial-gradient(420px 260px at 88% 70%, rgba(97, 180, 255, 0.10), transparent 60%);
+  animation: auroraDrift 22s ease-in-out infinite alternate;
 }
 @keyframes auroraDrift {
   0% { transform: translate3d(-2%, -1%, 0) scale(1); }
-  50% { transform: translate3d(2%, 2%, 0) scale(1.05); }
+  50% { transform: translate3d(2%, 2%, 0) scale(1.06); }
   100% { transform: translate3d(-1%, 1.5%, 0) scale(1.02); }
+}
+
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 12%, rgba(232, 236, 243, 0.7), transparent 100%),
+    radial-gradient(1px 1px at 22% 32%, rgba(232, 236, 243, 0.5), transparent 100%),
+    radial-gradient(2px 2px at 34% 8%, rgba(61, 255, 160, 0.6), transparent 100%),
+    radial-gradient(1px 1px at 46% 26%, rgba(232, 236, 243, 0.45), transparent 100%),
+    radial-gradient(1.5px 1.5px at 58% 14%, rgba(97, 180, 255, 0.6), transparent 100%),
+    radial-gradient(1px 1px at 70% 30%, rgba(232, 236, 243, 0.5), transparent 100%),
+    radial-gradient(2px 2px at 82% 10%, rgba(61, 255, 160, 0.5), transparent 100%),
+    radial-gradient(1px 1px at 92% 24%, rgba(232, 236, 243, 0.55), transparent 100%),
+    radial-gradient(1.5px 1.5px at 14% 52%, rgba(232, 236, 243, 0.4), transparent 100%),
+    radial-gradient(1px 1px at 64% 46%, rgba(97, 180, 255, 0.45), transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 54%, rgba(232, 236, 243, 0.4), transparent 100%),
+    radial-gradient(1px 1px at 4% 72%, rgba(61, 255, 160, 0.4), transparent 100%);
+  animation: starTwinkle 5s ease-in-out infinite alternate;
+}
+@keyframes starTwinkle {
+  0% { opacity: 0.55; }
+  100% { opacity: 1; }
 }
 
 .grid-floor {
@@ -182,18 +209,30 @@ onMounted(() => {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(61, 255, 160, 0.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61, 255, 160, 0.10) 1px, transparent 1px);
+    linear-gradient(rgba(61, 255, 160, 0.22) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(61, 255, 160, 0.22) 1.5px, transparent 1.5px);
   background-size: 46px 46px;
   transform: perspective(620px) rotateX(61deg);
   transform-origin: top center;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%, transparent 96%);
   mask-image: linear-gradient(to bottom, transparent 0, #000 26%, transparent 96%);
   animation: gridFlow 3.2s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(61, 255, 160, 0.35));
 }
 @keyframes gridFlow {
   from { background-position: 0 0, 0 0; }
   to { background-position: 0 46px, 0 46px; }
+}
+
+.grid-fog {
+  position: fixed;
+  left: -20%;
+  right: -20%;
+  bottom: 0;
+  height: 30%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(70% 100% at 50% 100%, rgba(61, 255, 160, 0.12), transparent 70%);
 }
 
 .horizon {
@@ -201,11 +240,11 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 46%;
-  height: 1px;
+  height: 2px;
   pointer-events: none;
   z-index: 0;
-  background: linear-gradient(90deg, transparent, rgba(61, 255, 160, 0.35) 30%, rgba(97, 180, 255, 0.35) 70%, transparent);
-  filter: blur(0.5px);
+  background: linear-gradient(90deg, transparent, rgba(61, 255, 160, 0.5) 30%, rgba(97, 180, 255, 0.5) 70%, transparent);
+  filter: blur(1px) drop-shadow(0 0 8px rgba(61, 255, 160, 0.4));
 }
 
 .noise {
