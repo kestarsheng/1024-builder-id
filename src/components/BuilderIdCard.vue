@@ -82,9 +82,17 @@
           <p v-if="!stats.languages.length" class="empty-lang">还没有公开仓库，纯血隐私型 Builder</p>
         </div>
         <footer class="card-footer back">
-          <div class="pixel-cat" aria-hidden="true"></div>
-          <p class="motto">致敬每一个正在 Build 的人</p>
-          <p class="since mono">入库于 {{ stats.createdAt.slice(0, 10) }}</p>
+          <div class="signature-strip">
+            <svg class="sig-svg" viewBox="0 0 130 30" aria-hidden="true">
+              <path d="M4 20 C 12 8, 20 5, 25 14 S 36 24, 43 12 S 52 4, 57 13 S 68 22, 75 11 S 86 6, 92 15 S 104 21, 112 11 S 122 9, 127 14" />
+              <path d="M14 25 C 40 27, 80 26, 118 23" class="sig-underline" />
+            </svg>
+            <span class="sig-label">AUTHORIZED SIGNATURE · 签发人</span>
+          </div>
+          <div class="back-right">
+            <p class="motto">致敬每一个正在 Build 的人</p>
+            <p class="since mono">入库于 {{ stats.createdAt.slice(0, 10) }}</p>
+          </div>
         </footer>
       </div>
     </div>
@@ -393,20 +401,57 @@ function barWidth(count) {
 
 .card-footer.back {
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
-.pixel-cat {
-  width: 56px;
-  height: 48px;
-  flex-shrink: 0;
-  background: #3dffa0;
-  box-shadow:
-    10px 0 #3dffa0, 20px 0 #3dffa0, 30px 0 #3dffa0, 40px 0 #3dffa0,
-    0 8px #3dffa0, 10px 8px #3dffa0, 20px 8px #0b0e14, 30px 8px #0b0e14, 40px 8px #3dffa0, 50px 8px #3dffa0,
-    0 16px #3dffa0, 10px 16px #0b0e14, 20px 16px #3dffa0, 30px 16px #3dffa0, 40px 16px #0b0e14, 50px 16px #3dffa0,
-    0 24px #3dffa0, 10px 24px #3dffa0, 20px 24px #3dffa0, 30px 24px #3dffa0, 40px 24px #3dffa0, 50px 24px #3dffa0,
-    10px 32px #2aa06b, 20px 32px #2aa06b, 30px 32px #2aa06b, 40px 32px #2aa06b;
-  image-rendering: pixelated;
+.signature-strip {
+  width: 148px;
+  padding: 7px 9px 5px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #f4f6fa 0%, #e6e9f0 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), inset 0 2px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+.signature-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0 3px,
+    rgba(20, 30, 50, 0.10) 3px 3.7px
+  );
+  pointer-events: none;
+}
+.sig-svg {
+  display: block;
+  width: 100%;
+  height: 30px;
+}
+.sig-svg path {
+  fill: none;
+  stroke: #1c2a45;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.sig-svg .sig-underline {
+  stroke-width: 0.8;
+  opacity: 0.45;
+}
+.sig-label {
+  display: block;
+  text-align: center;
+  font-size: 6.5px;
+  letter-spacing: 1.6px;
+  color: #5a6a85;
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+.back-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
 }
 .motto {
   font-family: "FangSong", "STFangsong", "KaiTi", serif;
@@ -417,6 +462,5 @@ function barWidth(count) {
 .since {
   font-size: 10px;
   color: #5c6878;
-  align-self: flex-end;
 }
 </style>
